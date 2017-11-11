@@ -21,7 +21,6 @@ def convert(pathname, size = 10):
             
 
 if __name__ == "__main__":
-    paths = glob.glob("./**/*.mp3", recursive = True)
-    p = Pool(5)
-    p.map(convert, paths)
+    for path in glob.glob("./**/*.mp3", recursive = True):
+        convert(path)
  
