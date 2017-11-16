@@ -11,7 +11,7 @@ model.add(Dense(12, activation='relu', input_shape=(13,)))
 model.add(Dense(8, activation='relu'))
 model.add(Dense(4, activation='relu'))
 # Add an output layer 
-model.add(Dense(1, activation='sigmoid'))
+model.add(Dense(1, activation='sigmoid')) # for a binary classification
 
 # Model output shape
 # model.output_shape
