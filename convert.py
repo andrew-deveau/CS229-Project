@@ -9,9 +9,7 @@ def convert(pathname, size = 10):
         song = AudioSegment.from_mp3(pathname)
         split_path = os.path.split(pathname)
         os.mkdir(os.path.join(split_path[0], split_path[1][:-4]))
-        for i, start in enumerate(range(1, len(song), size*1000)):
-            cur_segment = song[start: start + size*1000]
-            cur_segment.export(os.path.join(split_path[0], split_path[1][:-4], "segment_{}.wav".format(i)), format = "wav")
+        song.export(str(split_path[1][:-4]) + ".wav", format = "wav")
 
         return 0
     except Execption as e:
