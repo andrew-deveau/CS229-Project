@@ -22,7 +22,7 @@ model.add(Dense(1, activation='sigmoid')) # for a binary classification
 # List all weight tensors 
 # model.get_weights()
 
-model.compile(loss='binary_crossentropy', optimizer='adam',metrics=['accuracy'])
+model.compile(loss='mean_squared_error', optimizer='sgd',metrics=['accuracy'])
 
 def neural_net(X_train, y_train, X_test, y_test):
   model.fit(X_train, y_train,epochs=20, batch_size=1, verbose=1)
