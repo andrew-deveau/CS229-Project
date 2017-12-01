@@ -17,9 +17,9 @@ def spectrogram(pathname):
     return np.ndarray.flatten(np.transpose(Sxx))
 
 def build_data(language):
-    pth = "/afs/ir/data/linguistic-data/ldc/LDC94S17_OGI-Multilanguage-Corpus/calls/"
+    pth = "/farmshare/user_data/adeveau/calls"
     p = ProcessPool(5)
-    data = p.map(parse, glob.glob(pth + "./{}/**/*.wav".format(language), recursive = True))
+    data = p.map(parse, glob.glob(pth + "/{}/**/*.wav".format(language), recursive = True))
     X = np.vstack(data)
     return X
 
@@ -30,6 +30,7 @@ def parse(path):
 
 if __name__ == "__main__":
     for lang in ['english', 'farsi', 'french', 'german', 'hindi', 'japanese', 'korean', 'mandarin', 'spanish', 'tamil', 'vietnam']:
+        print(lang)
         X = build_data(lang)
         print(X.shape)
         np.save("{}_features.npy".format(lang), X)
