@@ -9,21 +9,17 @@ from python_speech_features.base import mfcc
 
 def calc_mfcc(pathname):
     samprate, samples = wavfile.read(pathname)
-    return mfcc(samples, samplerate = samprate, appendEnergy = False, nfft = 1024) 
+    return mfcc(samples, samplerate = samprate, appendEnergy = False)
 
 def spectrogram(pathname):
     samples = wavfile.read(pathname)
     t, f, Sxx = signal.spectrogram(samples[1])
     return np.ndarray.flatten(np.transpose(Sxx))
 
-def mfcc(pathnam):
-    samples = wavfile.read(pathname)
-    mfcc_feat = mfcc(samples[1],samples[0], winlen=0.025, winstep=0.01)
-    return mfcc_feat
-    
 def build_data(language):
+    pth = "/afs/ir/data/linguistic-data/ldc/LDC94S17_OGI-Multilanguage-Corpus/calls/"
     p = ProcessPool(5)
-    data = p.map(parse, glob.glob("./{}/**/*.wav".format(language), recursive = True)) 
+    data = p.map(parse, glob.glob(pth + "./{}/**/*.wav".format(language), recursive = True))
     X = np.vstack(data)
     return X
 
@@ -33,8 +29,7 @@ def parse(path):
     return x
 
 if __name__ == "__main__":
-    lang = sys.argv[1]
-    X = build_data(lang)
-    print(X.shape)
-    np.save("{}_features.npy".format(lang), X)
-
+    for lang in ['english', 'farsi', 'french', 'german', 'hindi', 'japanese', 'korean', 'mandarin', 'spanish', 'tamil', 'vietnam']:
+        X = build_data(lang)
+        print(X.shape)
+        np.save("{}_features.npy".format(lang), X)
