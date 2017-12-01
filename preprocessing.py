@@ -16,12 +16,14 @@ def spectrogram(pathname):
     t, f, Sxx = signal.spectrogram(samples[1])
     return np.ndarray.flatten(np.transpose(Sxx))
 
-def build_data(language):
+def build_data(language, train_fraction = .6, dev_fraction = .2):
     pth = "/farmshare/user_data/adeveau/calls"
     p = ProcessPool(5)
     data = p.map(parse, glob.glob(pth + "/{}/**/*.wav".format(language), recursive = True))
-    X = np.vstack(data)
-    return X
+    split_pt1 = int(len(data)*train_fraction)
+    split_pt2 = int(split_pt1 + len(data)*dev_fraction)
+    X_train, X_dev, X_test = np.vstack(data[:split_pt1]), np.vstack(data[split_pt1:split_pt2]), np.vstack(data[split_pt2:])
+    return X_train, X_dev, X_test
 
 def parse(path):
     lang = os.path.normpath(path).split(os.sep)[0]
@@ -31,6 +33,7 @@ def parse(path):
 if __name__ == "__main__":
     for lang in ['english', 'farsi', 'french', 'german', 'hindi', 'japanese', 'korean', 'mandarin', 'spanish', 'tamil', 'vietnam']:
         print(lang)
-        X = build_data(lang)
-        print(X.shape)
-        np.save("{}_features.npy".format(lang), X)
+        X_train, X_dev, X_test = build_data(lang)
+        np.save("{}_train_features.npy".format(lang), X_train)
+        np.save("{}_test_features.npy".format(lang), X_test)
+        np.save("{}_dev_features.npy".format(lang), X_dev)
