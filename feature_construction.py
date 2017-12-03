@@ -18,7 +18,6 @@ Here, I assume that our dataset is organized as following:
 '''
 
 
-
 # Keys in this dictionary should be language_folder names
 label_dict = {'English': 0,
           'French': 1,
@@ -41,6 +40,7 @@ contrast_std_list = list()
 pca_list = list()
 
 
+
 # NOTE: THIS ISN'T FUNCTIONING CODE, JUST AN OUTLINE
 for language_folder in folders:  # i.e. English, French, Spanish, ...
     
@@ -50,10 +50,10 @@ for language_folder in folders:  # i.e. English, French, Spanish, ...
         sample_rate, signal = scipy.io.wavfile.read(clip_file)
         
         # Generate feature vectors for each 10 second clip
-        mfcc_mean, mfcc_var, mfcc_cov = get_mfcc(signal)
-        centroid_mean, centroid_std = get_spec_centroid(signal)
-        contrast_mean, contrast_std = get_spec_contrast(signal)
-        pca = get_mfcc_pca(signal, num_components=4)
+        mfcc_mean, mfcc_var, mfcc_cov = get_mfcc(sample_rate, signal)
+        centroid_mean, centroid_std = get_spec_centroid(sample_rate, signal)
+        contrast_mean, contrast_std = get_spec_contrast(sample_rate, signal)
+        pca = get_mfcc_pca(sample_rate, signal, num_components=4)
         
         # Append each feature set list
         mfcc_mean_list.append(mfcc_mean)
@@ -97,7 +97,7 @@ np.save('mfcc_principal_components', np.array(pca_list))
 #     entries or principal components)
 
 
-def get_mfcc(signal):
+def get_mfcc(sample_rate, signal):
     '''
     Returns Mel Frequency Cepstral Coefficients
     Provides information about sinusoids that constitute sound wave,
@@ -123,7 +123,7 @@ def get_mfcc(signal):
     return mean, var, cov
 
 
-def get_spec_centroid(signal):
+def get_spec_centroid(sample_rate, signal):
     '''
     Measure of "center of gravity" of frequencies,
     i.e. amplitude-weighted average of frequencies
@@ -131,22 +131,22 @@ def get_spec_centroid(signal):
         Mean of spectral centroid time series
         Standard deviation of spectral centroid time series
     '''
-    centroid = librosa.feature.spectral_centroid(signal)[0,:]
+    centroid = librosa.feature.spectral_centroid(signal, sr=sample_rate)[0,:]
     return np.array([centroid.mean()]), np.array([np.std(centroid)])
 
 
-def get_spec_contrast(signal):
+def get_spec_contrast(sample_rate, signal):
     '''
     Meaure of the difference between peaks and troughs of wave
     Returns:
     Mean of spectral contrast time series
     Standard deviation of spectral time series
     '''
-    contrast = librosa.feature.spectral_contrast(signal)
+    contrast = librosa.feature.spectral_contrast(signal, sr=sample_rate)
     return np.array([contrast.mean()]), np.array([np.std(contrast)])
 
 
-def get_mfcc_pca(signal, num_components):
+def get_mfcc_pca(sample_rate, signal, num_components):
     '''
     Returns the N largest principal components of input multivariate time series
     Required input format: each time series arranged in a column vector
@@ -196,6 +196,7 @@ for language_folder in folders:  # i.e. English, French, Spanish, ...
 
 root = '/Users/justinpyron/Google Drive/Stanford/Fall 2017/CS 229/Project/'  # mac
 file_name = 'test_audio.wav'
+file_name = 'en003dow.wav'
 sample_rate, signal = scipy.io.wavfile.read(root + file_name)
 signal = signal[1000:21000]
 
