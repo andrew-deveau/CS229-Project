@@ -4,3 +4,4 @@ chopped_data*
 *multi*
 *.npy
 features/*
+*.pkl

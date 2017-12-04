@@ -6,6 +6,7 @@ import os
 from pathos.multiprocessing import ProcessPool
 import sys
 from python_speech_features.base import mfcc
+import pickle
 
 def calc_mfcc(pathname):
     samprate, samples = wavfile.read(pathname)
@@ -22,7 +23,7 @@ def build_data(language, train_fraction = .6, dev_fraction = .2):
     data = p.map(parse, glob.glob(pth + "/{}/**/*.wav".format(language), recursive = True))
     split_pt1 = int(len(data)*train_fraction)
     split_pt2 = int(split_pt1 + len(data)*dev_fraction)
-    X_train, X_dev, X_test = np.vstack(data[:split_pt1]), np.vstack(data[split_pt1:split_pt2]), np.vstack(data[split_pt2:])
+    X_train, X_dev, X_test = data[:split_pt1], data[split_pt1:split_pt2], data[split_pt2:]
     return X_train, X_dev, X_test
 
 def parse(path):
@@ -34,6 +35,10 @@ if __name__ == "__main__":
     for lang in ['english', 'farsi', 'french', 'german', 'hindi', 'japanese', 'korean', 'mandarin', 'spanish', 'tamil', 'vietnam']:
         print(lang)
         X_train, X_dev, X_test = build_data(lang)
-        np.save("{}_train_features.npy".format(lang), X_train)
-        np.save("{}_test_features.npy".format(lang), X_test)
-        np.save("{}_dev_features.npy".format(lang), X_dev)
+        with open("{}_train_features.pkl".format(lang), 'wb+') as f:
+            pickle.dump(X_train,f)
+        with open("{}_test_features.pkl".format(lang), 'wb+') as f:
+            pickle.dump(X_test, f)
+        with open("{}_dev_features.pkl".format(lang), 'wb+') as f:
+            pickle.dump(X_dev, f)
+        
