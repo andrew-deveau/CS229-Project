@@ -1,4 +1,4 @@
-from keras.layers import Dense, Flatten, Conv2D
+from keras.layers import Dense, Flatten, Conv2D, Dropout
 from keras.models import Sequential
 import pickle
 from keras.utils.np_utils import to_categorical
@@ -43,6 +43,7 @@ def model_constr(n, n_classes, n_neurons, filter_shape):
     model = Sequential()
     for n_neur, fs in zip(n_neurons, filter_shape):
         model.add(Conv2D(n_neur, fs,  input_shape = (n, 13, 1), kernel_initializer='he_normal', activation='tanh'))
+    model.add(Dropout(rate = .1))
     model.add(Flatten())
     model.add(Dense(units = n_classes, activation = 'softmax'))
     model.compile(loss = 'categorical_crossentropy', optimizer = Adam(), metrics = ['accuracy'])
