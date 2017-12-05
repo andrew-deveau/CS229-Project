@@ -39,9 +39,10 @@ def load_data(n, languages, which = 'train') :
     y = to_categorical(y)
     return X, y
 
-def model_constr(n, n_classes):
+def model_constr(n, n_classes, n_neurons, filter_shape):
     model = Sequential()
-    model.add(Conv2D(5, (10,1),  input_shape = (300, 13, 1), kernel_initializer='he_normal', activation='sigmoid'))
+    for n_neur, fs in zip(n_neurons, filter_shape):
+        model.add(Conv2D(n_neur, fs,  input_shape = (n, 13, 1), kernel_initializer='he_normal', activation='tanh'))
     model.add(Flatten())
     model.add(Dense(units = n_classes, activation = 'softmax'))
     model.compile(loss = 'categorical_crossentropy', optimizer = Adam(), metrics = ['accuracy'])
@@ -54,10 +55,19 @@ if __name__ == '__main__':
     else:
         n = 300
     if len(sys.argv) > 2:
-        langs = sys.argv[2:]
+        epochs = int(sys.argv[2])
     else:
-        langs = ['english', 'french']
+        epochs = 5
+
+    if len(sys.argv) > 3:
+        langs = sys.argv[3:]
+    else:
+        langs = ['english', 'french', 'vietnam','japanese', 'mandarin', 'spanish', 'german', 'korean', 'farsi', 'tamil']
+
     X, y = load_data(n, languages = langs)
     print(X.shape, y.shape)
-    model = model_constr(n, len(langs))
-    model.fit(X, y, epochs = 5, batch_size = 10)
+    model = model_constr(n, len(langs), [5], [(10, 1)])
+    model.fit(X, y, epochs = epochs, batch_size = 64)
+    X_dev, y_dev = load_data(n, languages = langs)
+    print("\n Dev error: {}".format(model.evaluate(X_dev, y_dev)))
+    model.save("saved_models/c_net_{}.mdl".format("_".join(x[:2] for x in langs)))
