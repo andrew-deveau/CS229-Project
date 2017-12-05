@@ -5,3 +5,5 @@ chopped_data*
 *.npy
 features/*
 *.pkl
+__pycache__/*
+saved_models/*
