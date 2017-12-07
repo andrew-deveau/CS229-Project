@@ -15,7 +15,7 @@ def calc_mfcc(pathname):
 def spectrogram(pathname):
     samples = wavfile.read(pathname)
     t, f, Sxx = signal.spectrogram(samples[1])
-    return np.ndarray.flatten(np.transpose(Sxx))
+    return np.transpose(Sxx)
 
 def build_data(language, train_fraction = .6, dev_fraction = .2):
     pth = "/farmshare/user_data/adeveau/calls"
