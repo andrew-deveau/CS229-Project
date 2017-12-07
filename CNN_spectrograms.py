@@ -11,14 +11,14 @@ def load(path):
         return pickle.load(f)
 
 def load_data(n, languages, which = 'train') :
-    path = "/farmshare/user_data/adeveau/CS229-Project/features/{}/ungrouped/".format(which)
+    path = "/farmshare/user_data/adeveau/CS229-Project/spectrograms_and_mfccs/{}/".format(which)
     data = {}
     for lang in languages:
         data[lang] = [x[1] for x in load(path+'{}_{}_features.pkl'.format(lang, which))]
     
    
     for lang in data:
-        data[lang] = [x[:n,:] for x in data[lang] if x.shape[0] > n]
+        data[lang] = [x[:n,:] for x in data[lang] if x.shape[1] > n]
     
     m = min(len(data[lang]) for lang in data)
     for lang in data:
