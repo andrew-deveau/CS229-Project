@@ -11,7 +11,7 @@ def load(path):
         return pickle.load(f)
 
 def load_data(n, languages, which = 'train') :
-    path = "/Users/boussardjulien/spectrograms_and_mfccs/train/".format(which)
+    path = "/farmshare/user_data/adeveau/CS229-Project/features/{}/ungrouped/".format(which)
     data = {}
     for lang in languages:
         data[lang] = [x[1] for x in load(path+'{}_{}_features.pkl'.format(lang, which))]
