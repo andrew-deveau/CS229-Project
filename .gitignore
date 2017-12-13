@@ -5,3 +5,4 @@ chopped_data*
 *.npy
 features/*
 *.pkl
+books_and_papers/*
