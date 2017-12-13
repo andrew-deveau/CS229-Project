@@ -15,7 +15,7 @@ def calc_mfcc(pathname):
 def spectrogram(pathname):
     samples = wavfile.read(pathname)
     t, f, Sxx = signal.spectrogram(samples[1])
-    return np.ndarray.flatten(np.transpose(Sxx))
+    return Sxx
 
 def build_data(language, train_fraction = .6, dev_fraction = .2):
     pth = "/farmshare/user_data/adeveau/calls"
@@ -29,7 +29,8 @@ def build_data(language, train_fraction = .6, dev_fraction = .2):
 def parse(path):
     lang = os.path.normpath(path).split(os.sep)[0]
     x = calc_mfcc(path)
-    return x
+    y = spectrogram(path)
+    return x,y
 
 if __name__ == "__main__":
     for lang in ['english', 'farsi', 'french', 'german', 'hindi', 'japanese', 'korean', 'mandarin', 'spanish', 'tamil', 'vietnam']:
