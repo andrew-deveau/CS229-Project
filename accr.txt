@@ -1,0 +1,59 @@
+saved_models/c_net_en_fr_(16, 8)_(3, 3)_tanh_0.1.mdl  0.58389261705
+
+saved_models/c_net_en_fr_(16, 8)_(7, 5)_tanh_0.001.mdl  0.620805368727
+
+saved_models/c_net_en_fr_(16, 8)_(5, 5)_tanh_0.01.mdl  0.58389261705
+
+saved_models/c_net_en_fr_(16, 8)_(10, 5)_tanh_0.01.mdl  0.614093959332
+
+saved_models/c_net_en_fr_(16, 8)_(3, 3)_tanh_1.mdl  0.58389261785
+
+saved_models/c_net_en_fr_(16, 8)_(5, 5)_tanh_0.001.mdl  0.590604027046
+
+saved_models/c_net_en_fr_(16, 8)_(7, 3)_tanh_0.1.mdl  0.604026846438
+
+saved_models/c_net_en_fr_(16, 8)_(3, 3)_tanh_0.001.mdl  0.620805368727
+
+saved_models/c_net_en_fr_(16, 8)_(7, 3)_tanh_0.01.mdl  0.58389261765
+
+saved_models/c_net_en_fr_(16, 8)_(10, 3)_tanh_0.1.mdl  0.620805368727
+
+saved_models/c_net_en_fr_(16, 8)_(5, 3)_tanh_0.1.mdl  0.597315435842
+
+saved_models/c_net_en_fr_(16, 8)_(10, 5)_tanh_0.001.mdl  0.620805369928
+
+saved_models/c_net_en_ma.mdl  0.271812080637
+
+saved_models/c_net_en_fr_(16, 8)_(7, 5)_tanh_0.01.mdl  0.593959731144
+
+saved_models/c_net_en_fr_(16, 8)_(10, 3)_tanh_1.mdl  0.610738254634
+
+saved_models/c_net_en_fr_(16, 8)_(10, 3)_tanh_0.001.mdl  0.604026846438
+
+saved_models/c_net_en_fr_(16, 8)_(7, 5)_tanh_1.mdl  0.546979866172
+
+saved_models/c_net_en_fr_(16, 8)_(5, 3)_tanh_0.001.mdl  0.593959732344
+
+saved_models/c_net_en_fr_(16, 8)_(5, 3)_tanh_1.mdl  0.56711409396
+
+saved_models/c_net_en_fr_(16, 8)_(7, 5)_tanh_0.1.mdl  0.610738255434
+
+saved_models/c_net_en_fr_(16, 8)_(5, 5)_tanh_1.mdl  0.577181208454
+
+saved_models/c_net_en_fr_(16, 8)_(3, 3)_tanh_0.01.mdl  0.60067114054
+
+saved_models/c_net_en_fr_(16, 8)_(5, 3)_tanh_0.01.mdl  0.60067114054
+
+saved_models/c_net_en_fr_(16, 8)_(7, 3)_tanh_1.mdl  0.607382549536
+
+saved_models/c_net_en_fr_(16, 8)_(7, 3)_tanh_0.001.mdl  0.604026845238
+
+saved_models/c_net_en_fr_(16, 8)_(10, 5)_tanh_0.1.mdl  0.593959731944
+
+saved_models/c_net_en_fr_(16, 8)_(5, 5)_tanh_0.1.mdl  0.624161073826
+
+saved_models/c_net_en_fr_(16, 8)_(10, 3)_tanh_0.01.mdl  0.654362416907
+
+saved_models/c_net_en_fr_(16, 8)_(10, 5)_tanh_1.mdl  0.580536912352
+
+saved_models/c_net_en_fr_(16, 8)_(3, 3)_sigmoid_0.001.mdl  0.5
