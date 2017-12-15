@@ -8,3 +8,6 @@ features/*
 books_and_papers/*
 __pycache__/*
 saved_models/*
+*.mdl
+*.out
+*.txt
