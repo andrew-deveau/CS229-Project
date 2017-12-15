@@ -6,6 +6,9 @@ from keras.optimizers import Adam
 import numpy as np
 import sys
 import random
+import itertools
+from keras.regularizers import l2
+
 
 def load(path):
     with open(path, 'rb+') as f:
@@ -60,16 +63,30 @@ def merged_data(n, l1 = ['english', 'german'], l2 = ['mandarin'], which = 'train
 
     return np.concatenate((X_l1, X_l2), axis = 0), y, {tuple(l1):0, tuple(l2):1}
 
-def model_constr(n, n_classes, n_neurons, filter_shape):
+def model_constr(n, n_classes, n_neurons, filter_shape, dropout_rate, Lambda):
     model = Sequential()
     for n_neur, fs in zip(n_neurons, filter_shape):
-        model.add(Conv2D(n_neur, fs,  input_shape = (n, 13, 1), kernel_initializer='he_normal', activation='tanh'))
-    model.add(Dropout(rate = .1))
+        model.add(Conv2D(n_neur, fs,  input_shape = (n, 13, 1), kernel_initializer='he_normal', activation='tanh', kernel_regularizer = l2(Lambda)))
+    model.add(Dropout(rate = dropout_rate))
     model.add(Flatten())
     model.add(Dense(units = n_classes, activation = 'softmax'))
     model.compile(loss = 'categorical_crossentropy', optimizer = Adam(), metrics = ['accuracy'])
     return model
 
+def cross_validate(shapes, lambdas, dropout_rates):
+    X_train, y_train, cat_y_train, _ = load_data(300, languages = ['english', 'mandarin'], which = 'train')
+    X_dev, y_dev, cat_y_dev, _ = load_data(300, languages = ['english', 'mandarin'], which = 'dev')
+    dev_accr = []
+    for shape, Lambda, do_rate in itertools.product(shapes, lambdas, dropout_rates):
+        cur_model = model_constr(300, 2, [16,8], shape, do_rate, Lambda)
+        cur_model.fit(X_train, cat_y_train, verbose = 0, epochs = 5, batch_size = 32)
+        accr = cur_model.evaluate(X_dev, cat_y_dev, verbose = 0)
+        tag = "_".join([str(s) for s in (shape, Lambda, do_rate)])
+        dev_accr.append(tag + " " + str(accr[1]))
+        cur_model.save("saved_models/c_net_{}_{}.mdl".format("_".join(x[:2] for x in langs), tag))
+
+    with open('dev_accr.txt', 'wt') as f:
+        f.write("\n".join(dev_accr))
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -85,14 +102,20 @@ if __name__ == '__main__':
         langs = sys.argv[3:]
     else:
         langs = ['english', 'french', 'vietnam','japanese', 'mandarin', 'spanish', 'german', 'korean', 'farsi', 'tamil']
+ 
+    shapes = [[(x,1), (x,1)] for x in [5, 10, 20, 30]]
+    Lambdas = [.001, .01, .1, 1]
+    do_rates = [.01, .2, .3, .5]
 
-    X, y = load_data(n, languages = langs)
-    print(X.shape, y.shape)
-    model = model_constr(n, len(langs), [8], [(30, 1)])
-    model.fit(X, y, epochs = epochs, batch_size = 10)
-    X_dev, y_dev = load_data(n, languages = langs, which = 'dev')
-    print("\n Train error: {}".format(model.evaluate(X,y)))
-    print("\n Dev error: {}".format(model.evaluate(X_dev, y_dev)))
+    #cross_validate(shapes, Lambdas, do_rates)   
+    X_train, y_train, cat_y_train, key = load_data(n, languages = langs)
+    print(key)
+    model = model_constr(n, len(langs), [16,8], [(5, 1), (5,1)], 1, .3)
+    model.fit(X_train, cat_y_train, epochs = epochs, batch_size = 10)
+    X_dev, y_dev, cat_y_dev, _ = load_data(n, languages = langs, which = 'dev')
+    print("\n Train error: {}".format(model.evaluate(X_train,cat_y_train)))
+    print("\n Dev error: {}".format(model.evaluate(X_dev, cat_y_dev)))
     #X_test, y_test = load_data(n, languages = langs, which = 'test')
     #print("\n Test error: {}".format(model.evaluate(X_test, y_test)))
-    #model.save("saved_models/c_net_{}.mdl".format("_".join(x[:2] for x in langs)))
+    model.save("saved_models/c_net_full.mdl")
+    
